@@ -234,6 +234,47 @@ app.get("/api/feed/latest", async (req, res) => {
   res.json(videos);
 });
 
+
+
+// Endpoint pour suivre un utilisateur
+app.post("/api/users/:id/follow", verifyToken, async (req, res) => {
+  const userToFollow = await User.findById(req.params.id);
+  const currentUser = await User.findById(req.userId);
+  if (!currentUser.following.includes(userToFollow._id)) {
+    currentUser.following.push(userToFollow._id);
+    await currentUser.save();
+  }
+  res.json(currentUser);
+});
+
+// Endpoint pour ne plus suivre un utilisateur
+app.post("/api/users/:id/unfollow", verifyToken, async (req, res) => {
+  const userToUnfollow = await User.findById(req.params.id);
+  const currentUser = await User.findById(req.userId);
+  currentUser.following.pull(userToUnfollow._id);
+  await currentUser.save();
+  res.json(currentUser);
+});
+
+// Endpoint pour obtenir tous les utilisateurs
+app.get("/api/users", async (req, res) => {
+  const users = await User.find().select("-password");
+  res.json(users);
+});
+
+// Add to your backend routes
+app.get('/api/users/me', verifyToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).select('-password');
+    if (!user) return res.status(404).json({ error: 'Utilisateur non trouvé' });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
+
+
 // Lancer serveur
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Serveur lancé sur http://localhost:${PORT}`));

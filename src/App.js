@@ -1,29 +1,29 @@
-// src/App.js
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import Trending from './pages/Trending';
-import Profile from './pages/Profile';
-import Upload from './pages/Upload';
-import Login from './pages/Login';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Videos from "./pages/Videos";
+import AddVideo from "./pages/AddVideo";
+import Profile from "./pages/Profile";
+import BottomNav from "./components/BottomNav";
 
-const App = () => {
-  return (
-    <Router>
-      <Navbar />
-      <div className="container">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/trending" element={<Trending />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/upload" element={<Upload />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </div>
-    </Router>
+function App() {
+  return React.createElement(
+    Router,
+    null,
+    React.createElement(
+      "div",
+      { style: { paddingBottom: "60px" } },
+      React.createElement(
+        Routes,
+        null,
+        React.createElement(Route, { path: "/", element: React.createElement(Home) }),
+        React.createElement(Route, { path: "/videos", element: React.createElement(Videos) }),
+        React.createElement(Route, { path: "/add", element: React.createElement(AddVideo) }),
+        React.createElement(Route, { path: "/profile", element: React.createElement(Profile) })
+      ),
+      React.createElement(BottomNav)
+    )
   );
-};
+}
 
 export default App;
